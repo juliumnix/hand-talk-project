@@ -5,5 +5,6 @@ export const firebaseConfig = {
   storageBucket: 'hand-talk-project.appspot.com',
   messagingSenderId: '923158347936',
   appId: '1:923158347936:web:e3c265fac4919fd3bb49c5',
-  measurementId: 'G-2VHXCTE1FN'
+  measurementId: 'G-2VHXCTE1FN',
+  databaseURL: 'https://hand-talk-project-default-rtdb.firebaseio.com'
 };

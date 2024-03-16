@@ -13,15 +13,15 @@ interface Rotation {
   rotation: { x: number; y: number; z: number };
 }
 
-type GeometryFigureNameType = 'cube' | 'cone' | 'dodecahedron';
+export type GeometryFigureNameType = 'cube' | 'cone' | 'dodecahedron';
 
-const Geometry3D = ({
+export function Geometry3D({
   rotation = 0,
   geometryFigureName,
   color,
   position,
   isRotating = false
-}: Object3DProps) => {
+}: Object3DProps) {
   const meshRef = useRef<Rotation>();
   useFrame((_, delta) => {
     meshRef.current!.rotation.z = -rotation * (Math.PI / 180);
@@ -63,6 +63,4 @@ const Geometry3D = ({
       {geometricFigurePicker()}
     </mesh>
   );
-};
-
-export default Geometry3D;
+}

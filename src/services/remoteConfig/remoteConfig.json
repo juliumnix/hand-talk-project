@@ -1,0 +1,5 @@
+[
+  { "shape": "cube", "color": "red", "rotation": 90 },
+  { "shape": "cone", "color": "yellow", "rotation": 45 },
+  { "shape": "dodecahedron", "color": "yellow", "rotation": 0 }
+]
