@@ -1,45 +1,63 @@
-import { Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useAuthService } from '../../hooks/useAuthService';
-import { useRemoteConfig } from '../../hooks/useRemoteConfig';
+import { useUserService } from '../../hooks/useUserService';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../routes/Routes';
+import { Button } from '../../components/Button/Button';
+import { Input } from '../../components/Input/Input';
 
-export default function AuthScreen() {
+type ScreenProps = NativeStackScreenProps<RootStackParamList, 'AuthScreen'>;
+
+export default function AuthScreen({ navigation }: ScreenProps) {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const { loginUser } = useAuthService();
-  const { getDefaultConfig } = useRemoteConfig();
+  const [loading, setLoading] = useState<boolean>(false);
+  const { loginUser } = useUserService();
 
   async function login() {
     try {
+      setLoading(true);
       const params = {
         email,
         password
       };
       const loggedUser = await loginUser(params);
-      console.log(loggedUser);
-      console.log(await getDefaultConfig());
+      if (loggedUser) {
+        navigation.replace('HomeScreen');
+      }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
+  }
+
+  function navigateToCreateAccount() {
+    navigation.navigate('CreateAccountScreen');
   }
   return (
     <SafeAreaView style={styles.container}>
-      <TextInput
+      <Input
         value={email}
         placeholder="Insira seu Email"
         onChangeText={(text) => setEmail(text)}
       />
-      <TextInput
+      <Input
         value={password}
         secureTextEntry
         placeholder="Insira sua senha"
         onChangeText={(text) => setPassword(text)}
       />
 
-      <TouchableOpacity onPress={login} style={styles.loginButton}>
-        <Text>Login</Text>
-      </TouchableOpacity>
+      <Button onPress={login} text="Login" isLoading={loading} />
+
+      <Button
+        style={{ marginTop: 16 }}
+        onPress={navigateToCreateAccount}
+        text="Criar uma conta"
+        isLoading={loading}
+      />
     </SafeAreaView>
   );
 }
@@ -47,15 +65,8 @@ export default function AuthScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#e9ecef',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  loginButton: {
-    width: '50%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'green',
-    height: 40
   }
 });

@@ -1,12 +1,11 @@
 import { useFrame } from '@react-three/fiber';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 interface Object3DProps {
   rotation?: number;
   position?: [number, number, number];
   geometryFigureName: GeometryFigureNameType;
   color: string;
-  isRotating?: boolean;
 }
 
 interface Rotation {
@@ -19,14 +18,16 @@ export function Geometry3D({
   rotation = 0,
   geometryFigureName,
   color,
-  position,
-  isRotating = false
+  position
 }: Object3DProps) {
+  const [active, setActive] = useState(false);
   const meshRef = useRef<Rotation>();
+
   useFrame((_, delta) => {
     meshRef.current!.rotation.z = -rotation * (Math.PI / 180);
-    if (isRotating) {
-      meshRef.current!.rotation.x = Math.PI / 2;
+
+    if (active) {
+      meshRef.current!.rotation.x = delta;
       meshRef.current!.rotation.y += delta;
     }
   });
@@ -59,7 +60,12 @@ export function Geometry3D({
     }
   };
   return (
-    <mesh rotation={[0, 0, rotation]} ref={meshRef} position={position}>
+    <mesh
+      rotation={[0, 0, rotation]}
+      ref={meshRef}
+      position={position}
+      onClick={() => setActive(!active)}
+    >
       {geometricFigurePicker()}
     </mesh>
   );

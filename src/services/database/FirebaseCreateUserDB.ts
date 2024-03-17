@@ -1,7 +1,7 @@
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { ref, set } from 'firebase/database';
-import { useFirebase } from '../../hooks/useFirebase';
-import { loginUser } from '../login/FirebaseLogin';
+import database from '@react-native-firebase/database';
+import auth from '@react-native-firebase/auth';
+import { useRemoteConfig } from '../../hooks/useRemoteConfig';
+import { useAsyncStorage } from '../../hooks/useAsyncStorage';
 
 interface CreateUserProps {
   email: string;
@@ -11,11 +11,23 @@ export async function createUser({
   email,
   password
 }: CreateUserProps): Promise<boolean> {
-  const { database } = useFirebase();
   try {
-    const userLogin = await loginUser({ email, password });
-    await set(ref(database, 'users/' + userLogin.user.uid), {
-      username: userLogin.user.email
+    if (email === '' || password === '') {
+      return false;
+    }
+    const { getDefaultConfig } = useRemoteConfig();
+    const { setItem } = useAsyncStorage();
+
+    const userLogin = await auth().createUserWithEmailAndPassword(
+      email,
+      password
+    );
+
+    const data = getDefaultConfig();
+    await setItem(userLogin.user.uid);
+    await database().ref(`users/${userLogin?.user.uid}`).set({
+      username: userLogin?.user.email,
+      config: data
     });
     return true;
   } catch (error) {

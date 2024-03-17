@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "923158347936",
+    "firebase_url": "https://hand-talk-project-default-rtdb.firebaseio.com",
+    "project_id": "hand-talk-project",
+    "storage_bucket": "hand-talk-project.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:923158347936:android:32f7728a4b645c5abb49c5",
+        "android_client_info": {
+          "package_name": "com.example.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBuqF0waRiv_MdTQ1rb3b36dVX8v5rwpws"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
